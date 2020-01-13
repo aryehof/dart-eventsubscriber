@@ -1,14 +1,18 @@
-name: eventnotifier_flutter
-description: A starting point for Dart libraries or applications.
-# version: 1.0.0
-# homepage: https://www.example.com
+name: eventsubscriber
+version: 1.0.0
+description: Flutter widget for subscribing to EventNotifier events.
+homepage: https://github.com/aryehof/eventsubscriber
 
 environment:
   sdk: '>=2.7.0 <3.0.0'
 
-#dependencies:
-#  path: ^1.6.0
+dependencies:
+  flutter:
+    sdk: flutter
+  eventnotifier: ^1.0.2
 
 dev_dependencies:
+  flutter_test:
+    sdk: flutter
   pedantic: ^1.8.0
   test: ^1.6.0
