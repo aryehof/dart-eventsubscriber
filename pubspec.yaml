@@ -1,6 +1,6 @@
 name: eventsubscriber
-version: 1.0.0
-description: Flutter widget for subscribing to EventNotifier events.
+version: 1.0.1
+description: A Flutter widget that supports subscribing to one or more named EventNotifier events.
 homepage: https://github.com/aryehof/eventsubscriber
 
 environment:

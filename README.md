@@ -16,7 +16,7 @@ A Flutter widget that supports subscribing to one or more named [EventNotifier][
 
 ## Usage
 
-A simple example (see the  static EventNotifier test method):
+A simple example:
 
 ```dart
 import 'package:flutter/material.dart';

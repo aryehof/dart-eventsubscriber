@@ -19,7 +19,10 @@ class EventSubscriber extends StatefulWidget {
   /// Creates a subscriber to a named [EventNotifier] event. Rebuilds when notified that the event has occured.
   /// Query the model (if appropriate) to determine details of what changed.
   EventSubscriber(
-      {Key key, @required this.model, @required this.eventNames, @required this.builder})
+      {Key key,
+      @required this.model,
+      @required this.eventNames,
+      @required this.builder})
       : super(key: key);
 
   @override
@@ -35,7 +38,8 @@ class _EventSubscriberState extends State<EventSubscriber> {
   void initState() {
     super.initState();
     if (widget.eventNames.isEmpty) {
-      throw SubscriberException('at least one eventName must be specified', 'InitState');
+      throw SubscriberException(
+          'at least one eventName must be specified', 'InitState');
     }
     for (var eventName in widget.eventNames) {
       widget.model.subscribe(eventName, _update);
