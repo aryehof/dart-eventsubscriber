@@ -45,7 +45,7 @@ void main() => runApp(
         home: Column(
             children: <Widget>[
             // Subscribe to the 'valueChanged' model event
-            EventSubscriber(
+            EventSubscriber(      // <<===
                 model: myCount,
                 eventNames: ['valueChanged'],
                 builder: (context) => Text(myCount.value.toString()),
