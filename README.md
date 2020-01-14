@@ -12,7 +12,9 @@ A Flutter widget that supports subscribing to one or more named [EventNotifier][
 
 ## Dependencies
 
-- `Flutter` - This Dart package has a dependency on the `Flutter` framework.
+- [Flutter][flutter] - This Dart package has a dependency on the `Flutter` framework.
+- [EventNotifier][eventnotifier] - Indirect. Typically one will 'mixin' EventNotifier with your domain model. Your domain model would then be the 
+dependency.
 
 ## Usage
 
@@ -26,6 +28,7 @@ import 'package:eventsubscriber/eventsubscriber.dart';
 // An example domain model
 // Normally in its own module/package
 // Included here for illustration purposes
+// EventNotifier is 'mixed-in' with the domain model
 class Count with EventNotifier {
   int value = 0;
   void increment() {
@@ -66,3 +69,4 @@ Please file feature requests and bugs at the [issue tracker][tracker].
 
 [tracker]: https://github.com/aryehof/eventsubscriber/issues
 [eventnotifier]: https://pub.dev/packages/eventnotifier
+[flutter]: https://flutter.dev/
