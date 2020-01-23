@@ -2,19 +2,18 @@
 
 [![Pub Package](https://img.shields.io/pub/v/eventsubscriber.svg?style=flat-square)](https://pub.dev/packages/eventsubscriber)
 
-A Flutter widget that supports subscribing to one or more named [EventNotifier][eventnotifier] events.
+A Flutter widget that supports subscribing to an [Event].
 
- The `EventSubscriber` widget will be notified and rebuilt when a subscribed event occurs, allowing some changing aspect of a problem domain model to be displayed in your Flutter user interface.
+ The `EventSubscriber` widget will be notified and rebuilt when the [Event] occurs, allowing some changing aspect of an observed object to be displayed in your Flutter user interface.
 
 ## See also
 
-[EventNotifier][eventnotifier] - broadcasts named events to interested subscribers.
+[Event] - broadcasts events to interested subscribers.
 
 ## Dependencies
 
 - [Flutter][flutter] - This Dart package has a dependency on the `Flutter` framework.
-- [EventNotifier][eventnotifier] - Indirect. Typically one will 'mixin' EventNotifier with your domain model. Your domain model would then be the 
-dependency.
+- [Event] - Supports the creation of lightweight custom Dart Events, that allow interested subscribers to be notified that something has happened. Provides a notification mechanism across independent packages/layers/modules.
 
 ## Usage
 
@@ -22,18 +21,19 @@ A simple example:
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:eventnotifier/eventnotifier.dart';
+import 'package:event/event.dart';
 import 'package:eventsubscriber/eventsubscriber.dart';
 
 // An example domain model
 // Normally in its own module/package
 // Included here for illustration purposes
-// EventNotifier is 'mixed-in' with the domain model
-class Count with EventNotifier {
+class Count {
   int value = 0;
+  var onValueChanged = Event();
+
   void increment() {
     value++;
-    notify('valueChanged'); // notify subscribers
+    onValueChanged.raise();
   }
 }
 
@@ -44,29 +44,29 @@ var myCount = Count();
 
 // Flutter application
 void main() => runApp(
-    MaterialApp(
+      MaterialApp(
         home: Column(
-            children: <Widget>[
+          children: <Widget>[
             // Subscribe to the 'valueChanged' model event
-            EventSubscriber(      // <<===
-                model: myCount,
-                eventNames: ['valueChanged'],
-                builder: (context) => Text(myCount.value.toString()),
+            EventSubscriber(
+              event: myCount.onValueChanged,
+              builder: (context) => Text(myCount.value.toString()),
             ),
             FlatButton(
-                child: Text('Increment'),
-                onPressed: () => myCount.increment(),
+              child: Text('Increment'),
+              onPressed: () => myCount.increment(),
             )
-            ],
+          ],
         ),
-    ),
-);
+      ),
+    );
 ```
 
 ## Features and bugs
 
 Please file feature requests and bugs at the [issue tracker][tracker].
 
-[tracker]: https://github.com/aryehof/eventsubscriber/issues
+[tracker]: https://github.com/aryehof/dart-eventsubscriber/issues
 [eventnotifier]: https://pub.dev/packages/eventnotifier
 [flutter]: https://flutter.dev/
+[event]: https://pub.dev/packages/event

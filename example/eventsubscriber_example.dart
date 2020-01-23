@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:eventnotifier/eventnotifier.dart';
+import 'package:event/event.dart';
 import 'package:eventsubscriber/eventsubscriber.dart';
 
 // An example domain model
 // Normally in its own module/package
 // Included here for illustration purposes
-class Count with EventNotifier {
+class Count {
   int value = 0;
+  var onValueChanged = Event();
+
   void increment() {
     value++;
-    notify('valueChanged'); // notify subscribers
+    onValueChanged.raise();
   }
 }
 
@@ -25,8 +27,7 @@ void main() => runApp(
           children: <Widget>[
             // Subscribe to the 'valueChanged' model event
             EventSubscriber(
-              model: myCount,
-              eventNames: ['valueChanged'],
+              event: myCount.onValueChanged,
               builder: (context) => Text(myCount.value.toString()),
             ),
             FlatButton(
