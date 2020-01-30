@@ -48,13 +48,13 @@ class _EventSubscriberState extends State<EventSubscriber> {
   void initState() {
     super.initState();
     // Subscribe the [_update] method to the [Event]
-    widget.event.addHandler((_, __) => _update());
+    widget.event.subscribe((_) => _update());
   }
 
   @override
   void dispose() {
     try {
-      widget.event.removeHandler((_, __) => _update());
+      widget.event.unsubscribe((_) => _update());
     } catch (error) {
       throw SubscriberError(error, 'dispose');
     }
@@ -67,9 +67,9 @@ class _EventSubscriberState extends State<EventSubscriber> {
     try {
       if (widget.event != oldWidget.event) {
         // remove subscriber from oldWidget
-        widget.event.removeHandler((_, __) => _update());
+        widget.event.unsubscribe((_) => _update());
         // add subscribers in new widget
-        widget.event.addHandler((_, __) => _update());
+        widget.event.subscribe((_) => _update());
       }
     } catch (error) {
       throw SubscriberError(error, 'didUpdateWidget');

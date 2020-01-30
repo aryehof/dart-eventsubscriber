@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 1.1.1  (2020-01-29)
+
+- Support [Event] 1.1.0.
+- Modified to use new Event methods - broadcast and subscribe.
+
 ## Version 1.1.0  (2020-01-23)
 
 - **Breaking Change**. Now supports subscribing to an [Event] instead of [EventNotifier].
