@@ -44,17 +44,21 @@ class EventSubscriber extends StatefulWidget {
 ///////////////
 
 class _EventSubscriberState extends State<EventSubscriber> {
+  /// The handler that will be subscribed to this Widgets
+  /// associated [Event]. Causes the widget to rebuild.
+  void _eventHandler(args) => setState(() {});
+
   @override
   void initState() {
     super.initState();
     // Subscribe the [_update] method to the [Event]
-    widget.event.subscribe((_) => _update());
+    widget.event.subscribe(_eventHandler);
   }
 
   @override
   void dispose() {
     try {
-      widget.event.unsubscribe((_) => _update());
+      widget.event.unsubscribe(_eventHandler);
     } catch (error) {
       throw SubscriberError(error, 'dispose');
     }
@@ -67,20 +71,13 @@ class _EventSubscriberState extends State<EventSubscriber> {
     try {
       if (widget.event != oldWidget.event) {
         // remove subscriber from oldWidget
-        widget.event.unsubscribe((_) => _update());
+        widget.event.unsubscribe(_eventHandler);
         // add subscribers in new widget
-        widget.event.subscribe((_) => _update());
+        widget.event.subscribe(_eventHandler);
       }
     } catch (error) {
       throw SubscriberError(error, 'didUpdateWidget');
     }
-  }
-
-  /// The handler subscribed to this Widgets associated [Event].
-  ///
-  /// Causes the widget to rebuild.
-  void _update() {
-    setState(() {});
   }
 
   @override
