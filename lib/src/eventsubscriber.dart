@@ -46,7 +46,7 @@ class EventSubscriber extends StatefulWidget {
 class _EventSubscriberState extends State<EventSubscriber> {
   /// The handler that will be subscribed to this Widgets
   /// associated [Event]. Causes the widget to rebuild.
-  void _eventHandler(args) => setState(() {});
+  void _eventHandler(_) => setState(() {});
 
   @override
   void initState() {
