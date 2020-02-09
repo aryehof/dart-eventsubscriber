@@ -31,7 +31,7 @@ void main() => runApp(
             // Subscribe to the 'valueChanged' domain event
             EventSubscriber(
               event: myCount.onValueChanged,
-              builder: (context) => Text(myCount.value.toString()),
+              handler: (context, args) => Text(myCount.value.toString()),
             ),
             FlatButton(
               child: Text('Increment'),

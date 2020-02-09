@@ -7,11 +7,15 @@ import 'package:flutter/material.dart';
 
 import 'package:eventsubscriber/src/error.dart';
 
+/// A function definition that returns a Widget, given a context and (optional)
+/// [EventArgs] derived object.
+typedef ArgsWidgetBuilder<T extends EventArgs> = Widget Function(BuildContext context, T args);
+
 /// Represents a [Widget] that supports subscribing to an [Event],
 /// that updates (rebuilds) when the [Event] occurs.
 ///
 /// See [Event] at https://pub.dev/packages/event
-class EventSubscriber extends StatefulWidget {
+class EventSubscriber<T extends EventArgs> extends StatefulWidget {
   /// The [Event] to subscribe to, that will cause
   ///  this [EventSubscriber] to update (rebuild).
   ///
@@ -19,7 +23,7 @@ class EventSubscriber extends StatefulWidget {
   /// // example
   /// event: myCount.onValueChanged
   /// ```
-  final Event<EventArgs> event;
+  final Event<T> event;
 
   /// A function ([WidgetBuilder]) that returns a Widget.
   ///
@@ -30,23 +34,30 @@ class EventSubscriber extends StatefulWidget {
   /// // example
   /// builder: (context) => Text(myCount.value.toString())
   /// ```
-  final WidgetBuilder builder;
+  final ArgsWidgetBuilder<T> handler;
 
   /// Creates a [Widget] that rebuilds when an [Event] occurs.
   ///
   /// Query the object that defined the Event (if appropriate) to determine details of what changed.
-  EventSubscriber({Key key, @required this.event, @required this.builder}) : super(key: key);
+  EventSubscriber({Key key, @required this.event, @required this.handler}) : super(key: key);
 
   @override
-  _EventSubscriberState createState() => _EventSubscriberState();
+  _EventSubscriberState<T> createState() => _EventSubscriberState<T>();
 }
 
 ///////////////
 
-class _EventSubscriberState extends State<EventSubscriber> {
+class _EventSubscriberState<T extends EventArgs> extends State<EventSubscriber<T>> {
+  /// Optional [Event] arguments provided when an [Event] is broadcast.
+  T _lastArgs;
+
   /// The handler that will be subscribed to this Widgets
-  /// associated [Event]. Causes the widget to rebuild.
-  void _eventHandler(_) => setState(() {});
+  /// associated [Event]. Causes your handler to be called, and
+  /// the widget to rebuild.
+  void _eventHandler(T eventArgs) {
+    _lastArgs = eventArgs;
+    setState(() {});
+  }
 
   @override
   void initState() {
@@ -82,6 +93,21 @@ class _EventSubscriberState extends State<EventSubscriber> {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(builder: widget.builder);
+    return ArgsBuilder<T>(builder: widget.handler, args: _lastArgs);
+  }
+}
+
+//////////////////////
+
+class ArgsBuilder<T extends EventArgs> extends StatelessWidget {
+  const ArgsBuilder({Key key, @required this.builder, @required this.args})
+      : assert(builder != null),
+        super(key: key);
+  final ArgsWidgetBuilder<T> builder;
+  final T args;
+
+  @override
+  Widget build(BuildContext context) {
+    return builder(context, args);
   }
 }
