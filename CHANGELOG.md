@@ -1,5 +1,27 @@
 # Changelog - EventSubscriber
 
+## Version 1.2.1  (2020-02-17)
+
+- The [Event] name in the example folder changed to show a standard [Event Naming Pattern][EventNamingPattern].  In this pattern:-
+  - Events are suffixed with '*Event*' e.g. `valueChangedEvent`.
+  - If there is the need to wrap the broadcasting of the event in a function containing some additional processing or validation, then one would do so in a function prefixed with '*on*' e.g. `onValueChanged`.
+    - The suffix '*Event*' is removed from the 'on' function name.
+    - The event is prefixed with an underscore ('_') to indicate that it is private and that the on.. method should be used to broadcast that the event has occurred.
+    ```dart
+    // Event Naming Pattern -  ..Event, on..
+    var _valueChangedEvent = Event();
+    
+    void onValueChanged() {
+      // Some processing or validation
+      if (someImportantValue != null) {
+        _valueChangedEvent.broadcast();
+      }
+    }
+
+    // One would indicate that the event occurred ...
+    onValueChanged()
+    ```
+
 ## Version 1.2.0  (2020-02-09)
 
 - **Breaking Change**. Event arguments [EventArgs] are now supported.
@@ -59,3 +81,4 @@
 
 [Event]: https://pub.dev/packages/event
 [EventNotifier]: https://pub.dev/packages/eventnotifier
+[EventNamingPattern]: https://github.com/aryehof/dart-event/wiki/Event-Naming-Pattern

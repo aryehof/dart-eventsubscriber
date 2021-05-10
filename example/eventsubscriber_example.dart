@@ -7,12 +7,12 @@ import 'package:eventsubscriber/eventsubscriber.dart';
 // Included here inline for illustration purposes
 class Count {
   int value = 0;
-  var onValueChanged = Event(); // declare Event
+  var valueChangedEvent = Event(); // declare Event
 
   void increment() {
     value++;
     // Broadcast that the value has changed
-    onValueChanged.broadcast();
+    valueChangedEvent.broadcast();
   }
 }
 
@@ -30,12 +30,12 @@ void main() => runApp(
           children: <Widget>[
             // Subscribe to the 'valueChanged' domain event
             EventSubscriber(
-              event: myCount.onValueChanged,
+              event: myCount.valueChangedEvent,
               handler: (context, args) => Text(myCount.value.toString()),
             ),
-            FlatButton(
-              child: Text('Increment'),
+            TextButton(
               onPressed: () => myCount.increment(),
+              child: Text('Increment'),
             )
           ],
         ),
