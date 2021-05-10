@@ -21,7 +21,7 @@ A Flutter widget that supports subscribing to an [Event].
 
  ## [Usage](#usage)
 
- The Flutter `EventSubscriber` Widget requires that the `event` being subscribed to is specified, along with a `handler` that returns a child Widget.
+ The Flutter `EventSubscriber` Widget requires that the `Event` being subscribed to is specified, along with a `handler` that returns a child Widget.
 
 ```dart
 // example ...
