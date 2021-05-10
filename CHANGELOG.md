@@ -1,5 +1,10 @@
 # Changelog - EventSubscriber
 
+## Version 2.0.0  (2021-05-10)
+
+- Updated for null safety
+- A working Flutter example is provided in the example folder.
+
 ## Version 1.2.1  (2020-02-17)
 
 - The [Event] name in the example folder changed to show a standard [Event Naming Pattern][EventNamingPattern].  In this pattern:-
