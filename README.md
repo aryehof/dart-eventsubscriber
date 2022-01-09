@@ -23,13 +23,13 @@ A Flutter widget that supports subscribing to an [Event].
 
  ## [Usage](#usage)
 
- The Flutter `EventSubscriber` Widget requires that the `Event` being subscribed to is specified, along with a `handler` that returns a child Widget.
+ The Flutter `EventSubscriber` Widget requires that the `Event` being subscribed to is specified, along with a `builder` (`handler`) that returns a child Widget.
 
 ```dart
 // example ...
 EventSubscriber(
   event: myCount.valueChangedEvent,
-  handler: (context, args) => Text('${myCount.value}'),
+  builder: (context, args) => Text('${myCount.value}'),
 ),
 ```
 
@@ -80,7 +80,7 @@ void main() => runApp(
             // Subscribe to the 'valueChanged' domain event
             EventSubscriber(
               event: myCount.valueChangedEvent,
-              handler: (context, args) => Text(myCount.value.toString()),
+              builder: (context, args) => Text(myCount.value.toString()),
             ),
             FlatButton(
               child: Text('Increment'),
@@ -138,7 +138,7 @@ In Flutter, the arguments can be used as follows.
 // In Flutter ...
 EventSubscriber(
   event: myCount.valueChangedEvent,
-  handler: (context, args) {
+  builder: (context, args) {
     // Display the counter value, as well as whether
     // the counter value is even.
     
