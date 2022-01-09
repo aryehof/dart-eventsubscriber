@@ -6,6 +6,8 @@ A Flutter widget that supports subscribing to an [Event].
 
  The `EventSubscriber` widget will be notified and rebuilt when the [Event] occurs, allowing some changing aspect of an observed object to be displayed in your Flutter user interface.
 
+ Note: run the included Example project to see a working example.
+
 ---
 
 ### Contents

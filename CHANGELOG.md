@@ -1,5 +1,12 @@
 # Changelog - EventSubscriber
 
+## Version 2.1.0  (2022-01-09)
+
+- **Breaking Change**. The argument [handler] has been renamed to [builder] to be consistent with Flutter library APIs.
+- The internal [ArgsBuilder] and [_ArgsWidgetBuilder] classes have been made private.
+- Example application and test now works correctly.
+- License has been changed to AGPL-3.0
+
 ## Version 2.0.0  (2021-05-10)
 
 - Updated for null safety

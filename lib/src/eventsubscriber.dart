@@ -1,5 +1,5 @@
 // Copyright 2020 Aryeh Hoffman. All rights reserved.
-// Use of this source code is governed by an Apache-2.0 license that can be
+// Use of this source code is governed by an AGPL-3.0 license that can be
 // found in the LICENSE file.
 
 import 'package:event/event.dart';
@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 /// A function definition that returns a Widget, given a context and (optional)
 /// [EventArgs] derived object.
-typedef ArgsWidgetBuilder<T extends EventArgs> = Widget Function(BuildContext context, T? args);
+typedef _ArgsWidgetBuilder<T extends EventArgs> = Widget Function(BuildContext context, T? args);
 
 /// Represents a [Widget] that supports subscribing to an [Event],
 /// that updates (rebuilds) when the [Event] occurs.
@@ -32,12 +32,12 @@ class EventSubscriber<T extends EventArgs> extends StatefulWidget {
   /// // example
   /// builder: (context) => Text(myCount.value.toString())
   /// ```
-  final ArgsWidgetBuilder<T> handler;
+  final _ArgsWidgetBuilder<T> builder;
 
-  /// Creates a [Widget] that rebuilds when an [Event] occurs.
+  /// Creates an [EventSubscriber] that rebuilds when an [Event] occurs.
   ///
   /// Query the object that defined the Event (if appropriate) to determine details of what changed.
-  EventSubscriber({Key? key, required this.event, required this.handler}) : super(key: key);
+  EventSubscriber({Key? key, required this.event, required this.builder}) : super(key: key);
 
   @override
   _EventSubscriberState<T> createState() => _EventSubscriberState<T>();
@@ -60,7 +60,7 @@ class _EventSubscriberState<T extends EventArgs> extends State<EventSubscriber<T
   @override
   void initState() {
     super.initState();
-    // Subscribe the [_update] method to the [Event]
+    // subscribe the [_update] method to the [Event]
     widget.event.subscribe(_eventHandler);
   }
 
@@ -83,17 +83,17 @@ class _EventSubscriberState<T extends EventArgs> extends State<EventSubscriber<T
 
   @override
   Widget build(BuildContext context) {
-    return ArgsBuilder<T>(builder: widget.handler, args: _lastArgs);
+    return _ArgsBuilder<T>(builder: widget.builder, args: _lastArgs);
   }
 }
 
 //////////////////////
 
-class ArgsBuilder<T extends EventArgs> extends StatelessWidget {
-  final ArgsWidgetBuilder<T> builder;
+class _ArgsBuilder<T extends EventArgs> extends StatelessWidget {
+  final _ArgsWidgetBuilder<T> builder;
   final T? args;
 
-  const ArgsBuilder({Key? key, required this.builder, required this.args}) : super(key: key);
+  const _ArgsBuilder({Key? key, required this.builder, required this.args}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
