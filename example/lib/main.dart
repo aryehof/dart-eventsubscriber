@@ -38,19 +38,19 @@ class MyApp extends StatelessWidget {
               // The handler will be run whenever the Event occurs
               EventSubscriber(
                 event: myCounter.valueChangedEvent,
-                handler: (context, args) => Text(
+                builder: (context, args) => Text(
                   myCounter.value.toString(),
                   style: Theme.of(context).textTheme.headline3,
                 ),
               ),
               //=================================
-
-              TextButton(
-                onPressed: () => myCounter.increment(), // << ========= increment the counter
-                child: Text('Increment Counter'),
-              ),
             ],
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: myCounter.increment,
+          tooltip: 'Increment',
+          child: const Icon(Icons.add),
         ),
       ),
     );
