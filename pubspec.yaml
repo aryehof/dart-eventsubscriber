@@ -1,5 +1,5 @@
 name: eventsubscriber
-version: 2.1.1
+version: 2.1.2
 description: A Flutter widget that updates (rebuilds) when an Event occurs.
 homepage: https://github.com/aryehof/dart-eventsubscriber
 

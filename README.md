@@ -35,7 +35,7 @@ EventSubscriber(
 
 ## [See Also](#seealso)
 
-[Event] - broadcasts events to interested subscribers.
+[Event] - A Dart package that broadcasts events to interested subscribers.
 
 ## [Dependencies](#dependencies)
 
@@ -96,13 +96,13 @@ void main() => runApp(
 
 ### [Using Arguments (EventArgs)](#using-arguments)
 
-One might alter the above `Count` domain model to include custom arguments (`EventArgs`). For example, we might want to provide the subscriber handler with the date and time the event occured, and also if the counter value is an even number (divisible by 2).
+One might alter the above `Count` domain model to include custom arguments (`EventArgs`). In other words, to pass data with the 'Event'. For example, we might want to provide the subscriber handler with the date and time the event occured, and also if the counter value is an even number (divisible by 2).
 
 > See the [Event] package for additional information about [EventArgs].
 
 ```dart
 
-// Custom Event arguments
+// Example custom Event arguments
 ValueChangedEventArgs extends EventArgs {
   DateTime whenOccured;
   bool isEven;
@@ -120,12 +120,12 @@ To use `ValueChangedEventArgs`, one would alter the `Counter` class from the pre
 // Includes Event arguments
 class Count {
   int value = 0;
-  var valueChangedEvent = Event<ValueChangedEventArgs>(); // <<====
+  var valueChangedEvent = Event<ValueChangedEventArgs>(); //<<====
 
   void increment() {
     value++;
     // Broadcast that the value has changed
-    valueChangedEvent.broadcast(ValueChangedEventArgs(value)); // <<====
+    valueChangedEvent.broadcast(ValueChangedEventArgs(value)); //<<====
   }
 }
 ```
@@ -135,7 +135,8 @@ In Flutter, the arguments can be used as follows.
 > _Note that best practice is that generally on notification one queries the domain model directly, rather than having arguments deliver data to a consumer of the domain model, i.e. this Flutter UI application. The supply of data shown here is by way of example only._
 
 ```dart
-// In Flutter ...
+// In Flutter use the passed data...
+
 EventSubscriber(
   event: myCount.valueChangedEvent,
   builder: (context, args) {
