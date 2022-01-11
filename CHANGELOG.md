@@ -1,12 +1,9 @@
 # Changelog - EventSubscriber
 
-## Version 2.1.2  (2022-01-10)
+## Version 2.1.3  (2022-01-11)
 
 - Improvements to README
-
-## Version 2.1.1  (2022-01-09)
-
-- Fixed errors in README
+- Minor refactorings
 
 ## Version 2.1.0  (2022-01-09)
 

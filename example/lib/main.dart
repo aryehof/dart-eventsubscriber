@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
               EventSubscriber(
                 event: myCounter.valueChangedEvent,
                 builder: (context, args) => Text(
-                  myCounter.value.toString(),
+                  'Counter: ${myCounter.value}',
                   style: Theme.of(context).textTheme.headline3,
                 ),
               ),
