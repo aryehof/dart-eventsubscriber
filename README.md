@@ -4,9 +4,11 @@
 
 A Flutter widget that rebuilds for every new [Event].
 
- The `EventSubscriber` widget will be notified and will rebuild when one or more [Event]'s occurs, allowing some changing aspect of an observed object to be displayed in your Flutter user interface.
+ The `EventSubscriber` widget will be notified and will rebuild when one or more [Event] occurs, allowing some changing aspect of an observed object to be displayed in your Flutter user interface.
 
  Note: run the included Example project to see a working example.
+
+> See CHANGELOG.md to see what has changed in this version.
 
 ---
 
@@ -14,22 +16,20 @@ A Flutter widget that rebuilds for every new [Event].
 - [Usage](#usage)
 - [See also](#seealso)
 - [Dependencies](#dependencies)
-- [Examples](#example)
-  - [Simple Example](#simple-example)
-  - [Using Arguments (EventArgs)](#using-arguments)
+- [Example](#example)
 - [Requesting Features and Reporting Bugs](#features-and-bugs)
 
 ---
 
  ## [Usage](#usage)
 
- The Flutter `EventSubscriber` Widget requires that one or more `Event`'s being subscribed to is specified, along with a `builder` (`handler`) that returns a child Widget.
+ The Flutter `EventSubscriber` Widget requires that you specify one or more Events, along with a `builder` function that returns a child Widget.
 
 ```dart
-// example ...
+// example
 EventSubscriber(
-  events: [myCount.valueChangedEvent],
-  builder: (context, args) => Text('${myCount.value}'),
+  events: [myCount.valueChanged],  // a List of 1 or more Events
+  builder: (context, status, args) => Text('${myCount.value}'),
 ),
 ```
 
@@ -39,10 +39,12 @@ EventSubscriber(
 
 ## [Dependencies](#dependencies)
 
-- [Flutter][flutter] - This Dart package has a dependency on the `Flutter` framework.
-- [Event] - Supports the creation of lightweight custom Dart Events, that allow interested subscribers to be notified that something has happened. Provides a notification mechanism across independent packages/layers/modules.
+- [Flutter][flutter] - This package has a dependency on the `Flutter` framework.
+- [Event] - Supports the creation of lightweight custom Dart Events, that allow interested subscribers to be notified that something has happened. Provides a notification mechanism across independent packages/layers/modules. Dependent on Dart only.
 
 ## [Example](#example)
+
+See the example folder for a more detailed example.
 
 
 ```dart
@@ -55,36 +57,38 @@ import 'package:eventsubscriber/eventsubscriber.dart';
 // Included here inline for illustration purposes
 class Counter {
   int value = 0;
-  var valueChangedEvent = Event(); // declare Event
+  var valueChanged = Event(); // declare Event
 
   void increment() {
     value++;
-    // Broadcast that the value has changed
-    valueChangedEvent.broadcast();
+    // broadcast that the value has changed
+    valueChanged.broadcast();
   }
 }
 
 //////////////////////
 
 // Create the domain model
-var myCount = Counter();
+var myCounter = Counter();
 
 // Flutter application
-// The Count domain value will increment when the button is pressed.
-// The updated domain value will be automatically updated in the UI.
+// The Counter value will increment when the button is pressed.
+// The updated value will be automatically updated in the UI.
 void main() => runApp(
       MaterialApp(
         home: Column(
           children: <Widget>[
             // Subscribe to the 'valueChanged' domain event
             EventSubscriber(
-              events: [myCount.valueChangedEvent],
-              builder: (context, args) => Text(myCount.value.toString()),
+              events: [myCounter.valueChanged],
+              builder: (context, status, args) {
+                return Text(myCount.value.toString());
+              },
             ),
             FlatButton(
               child: Text('Increment'),
               // Increment the domain value
-              onPressed: () => myCount.increment(),
+              onPressed: () => myCounter.increment(),
             )
           ],
         ),
