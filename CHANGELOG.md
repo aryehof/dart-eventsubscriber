@@ -11,7 +11,7 @@
 > The example app has been updated to show new features and changes.
 > 
 
-![screenshot](example/screenshots/simulator_screenshot_1F30405A-700C-45C4-AB46-0AD576AD70CC.png)
+![screenshot](example/screenshots/example_app_screenshot.png)
 
 1. Minimum Dart sdk dependency is now 3.4.0
 
@@ -77,7 +77,7 @@
       
      The number in brackets (#1) shows the cumulative number of times the Event received.
 
-![logimage](example/screenshots/Screenshot 2024-09-12 at 11.46.47.jpg)
+![logimage](example/screenshots/log_image.jpg)
 
 
 ## Version 2.1.3  (2022-01-11)
