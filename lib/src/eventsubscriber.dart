@@ -25,7 +25,7 @@ class EventSubscriber<T extends EventArgs> extends StatefulWidget {
   /// // example
   /// events: [[myCount.onValueChanged]]
   /// ```
-  late List<Event<T>> events = [];
+  final List<Event<T>> events;
 
   /// A function ([EventFunc]) that returns a Widget.
   ///
