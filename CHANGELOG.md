@@ -1,5 +1,85 @@
 # Changelog - EventSubscriber
 
+## Version 3.0.0  (2024-09-11)
+
+> This version has BREAKING CHANGES.
+> 
+> See also the `Event` package CHANGELOG.md file for changes in that associated package.
+> 
+>https://github.com/aryehof/dart-event
+
+> The example app has been updated to show new features and changes.
+> 
+
+![screenshot](example/screenshots/simulator_screenshot_1F30405A-700C-45C4-AB46-0AD576AD70CC.png)
+
+1. Minimum Dart sdk dependency is now 3.4.0
+
+
+2. EventSubscriber can now subscribe to multiple events. This means that parameter `event` has been replaced by `events` (plural).
+
+   - Specify one or more Events as a List [ ].
+
+    ```dart
+      // before, now deprecated
+      EventSubscriber(
+        event: myCounter.changedEvent, // deprecated
+        builder: ...
+    
+      // current version
+      EventSubscriber(
+        events: [myCounter.changedEvent, myCounter.otherEvent],  // <<==
+        builder: ...
+    ```
+    - EventSubscriber will rebuild when any of the Events listed occur.
+
+
+3. You can now determine which Event occured via the EventArgs `eventName` property. Note that the name must be set when declaring the Event, or else the value will be null.
+
+
+4. The `EventSubscriber` `builder` parameter now expects a function (handler) that takes 3 arguments:- a `context`, a `status` and `args`.
+   - Previously just a `context` and `args` was required.
+
+    ```dart
+      // status added as a builder function argument
+      EventSubscriber(
+        events: [myCounter.valueChangedEvent],
+        builder: (context, status, args) { ...   // <<== change
+    ```
+
+   - The status argument represents an instance of EventStatus, which provides 2 properties that you can access in your handler:-
+     - `numEventsReceived`- the cumulative number of a particular Event received.
+     - `hasReceivedFirstEvent`- true if an Event has been received, else false.
+       - An EventSubscriber will be initially displayed without having received an Event, i.e. `numEventReceived` will be 0, and `hasReceivedFirstEvent` will be false;
+       - Note, that `hasReceivedFirstEvent` is merely a convenience function that is equivalent to checking if `numEventsReceived == 0`.
+
+        ```dart
+          // example using status
+          EventSubscriber(
+            events: [myCounter.valueChangedEvent],
+            builder: (context, status, args) {
+              print(status.numEventsReceived);
+              print(status.hasReceivedFirstEvent);
+            },
+          )
+        ```
+
+
+5. Diagnostic logging is available via the associated `Event` package/dependency.
+    - A debug level message is output whenever an EventSubscriber is rebuilt.
+    - Your app must first call `showLog()` with `Severity.debug` or `Severity.all` for this message to be output.
+    - View messages in the Flutter DevTools Logging pane.
+    
+     ```
+     // example output  
+     EventSubscriber (debug): 2024-09-11 08:01:52.951224Z Event received so widget rebuilt (#1) "myEventName"
+     ```
+      
+     The number in brackets (#1) shows the cumulative number of times the Event received.
+
+![image](example/screenshots/Screenshot 2024-09-12 at 11.46.47.jpg)
+
+
 ## Version 2.1.3  (2022-01-11)
 
 - Improvements to README

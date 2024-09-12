@@ -3,100 +3,118 @@
 // found in the LICENSE file.
 
 import 'package:event/event.dart';
+import 'package:eventsubscriber/src/eventstatus.dart';
 import 'package:flutter/material.dart';
 
-/// A function definition that returns a Widget, given a context and (optional)
-/// [EventArgs] derived object.
-typedef _ArgsWidgetBuilder<T extends EventArgs> = Widget Function(BuildContext context, T? args);
+/// A function definition that returns a Widget, given a context,
+/// [EventStatus], and [EventArgs] or [EventArgs] derived object.
+typedef EventFunc<T extends EventArgs> = Widget Function(
+    BuildContext context, EventStatus status, T args);
+
+///////////////
 
 /// Represents a [Widget] that supports subscribing to an [Event],
 /// that updates (rebuilds) when the [Event] occurs.
 ///
 /// See [Event] at https://pub.dev/packages/event
 class EventSubscriber<T extends EventArgs> extends StatefulWidget {
-  /// The [Event] to subscribe to, that will cause
-  ///  this [EventSubscriber] to update (rebuild).
+  /// A `List` of one or more [Event]'s to subscribe to. When an Event occurs,
+  /// this [EventSubscriber] will update (rebuild).
   ///
   /// ```dart
   /// // example
-  /// event: myCount.onValueChanged
+  /// events: [[myCount.onValueChanged]]
   /// ```
-  final Event<T> event;
+  late List<Event<T>> events = [];
 
-  /// A function ([WidgetBuilder]) that returns a Widget.
+  /// A function ([EventFunc]) that returns a Widget.
   ///
   /// Typically the returned [Widget] (or a descendant)
   /// will reference some aspect of the object containing the observed [Event].
   ///
   /// ```dart
   /// // example
-  /// builder: (context) => Text(myCount.value.toString())
+  /// builder: (context, status, args) => Text(myCount.value.toString())
   /// ```
-  final _ArgsWidgetBuilder<T> builder;
+  final EventFunc<T> builder;
 
-  /// Creates an [EventSubscriber] that rebuilds when an [Event] occurs.
+  // Constructor
+  /// Creates an [EventSubscriber], a Widget that rebuilds when an [Event] occurs.
+  /// Requires a list of Events, and a [builder]. A builder is a function that returns
+  /// a Widget that is given a [BuildContext], [EventStatus] and [EventArgs].
   ///
-  /// Query the object that defined the Event (if appropriate) to determine details of what changed.
-  EventSubscriber({Key? key, required this.event, required this.builder}) : super(key: key);
+  /// ```dart
+  /// // example
+  /// EventSubscriber(
+  ///   events: [[counter.changed]], // list of one or more Events
+  ///   builder: (context, status, args) {
+  ///     return Placeholder();
+  ///   }
+  /// )
+  /// ```
+  ///
+  /// Query the object that defined the Event (if appropriate) to determine details
+  /// of what changed, or provide data as Event arguments.
+  EventSubscriber({required this.events, required this.builder, super.key});
 
   @override
-  _EventSubscriberState<T> createState() => _EventSubscriberState<T>();
+  EventSubscriberState<T> createState() => EventSubscriberState<T>();
 }
 
 ///////////////
 
-class _EventSubscriberState<T extends EventArgs> extends State<EventSubscriber<T>> {
-  /// Optional [Event] arguments provided when an [Event] is broadcast.
-  T? _lastArgs;
+class EventSubscriberState<T extends EventArgs> extends State<EventSubscriber<T>> {
+  /// [Event] arguments provided when an [Event] is broadcast.
+  T _eventArgs = EventArgs() as T;
+  final _status = EventStatus();
 
-  /// The handler that will be subscribed to this Widgets
+  /// The handler that will be subscribed to this Widget's
   /// associated [Event]. Causes your handler to be called, and
   /// the widget to rebuild.
-  void _eventHandler(T? eventArgs) {
-    _lastArgs = eventArgs;
-    setState(() {});
+  void _eventHandler(T args) {
+    setState(() {
+      this._eventArgs = args;
+      _status.numEventsReceived++;
+
+      log('Event received so widget rebuilt (#${_status.numEventsReceived}) "${_eventArgs.eventName ?? "Unnamed"}"',
+          source: "EventSubscriber", level: Severity.debug);
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    // subscribe the [_update] method to the [Event]
-    widget.event.subscribe(_eventHandler);
+    // subscribe the handler to each Event
+    for (var event in widget.events) {
+      event.subscribe(_eventHandler);
+    }
   }
 
   @override
   void dispose() {
-    widget.event.unsubscribe(_eventHandler);
+    for (var event in widget.events) {
+      event.unsubscribe(_eventHandler);
+    }
     super.dispose();
   }
 
   @override
   void didUpdateWidget(EventSubscriber oldWidget) {
     super.didUpdateWidget(oldWidget as EventSubscriber<T>);
-    if (widget.event != oldWidget.event) {
-      // remove subscriber from oldWidget
-      widget.event.unsubscribe(_eventHandler);
+    if (widget.events != oldWidget.events) {
+      // remove subscribers from oldWidget
+      for (var oldEvent in oldWidget.events) {
+        oldEvent.unsubscribe(_eventHandler);
+      }
       // add subscribers in new widget
-      widget.event.subscribe(_eventHandler);
+      for (var event in widget.events) {
+        event.subscribe(_eventHandler);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return _ArgsBuilder<T>(builder: widget.builder, args: _lastArgs);
-  }
-}
-
-//////////////////////
-
-class _ArgsBuilder<T extends EventArgs> extends StatelessWidget {
-  final _ArgsWidgetBuilder<T> builder;
-  final T? args;
-
-  const _ArgsBuilder({Key? key, required this.builder, required this.args}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return builder(context, args);
+    return widget.builder(context, _status, _eventArgs);
   }
 }
