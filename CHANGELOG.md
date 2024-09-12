@@ -77,7 +77,7 @@
       
      The number in brackets (#1) shows the cumulative number of times the Event received.
 
-![image](example/screenshots/Screenshot 2024-09-12 at 11.46.47.jpg)
+![logimage](example/screenshots/Screenshot 2024-09-12 at 11.46.47.jpg)
 
 
 ## Version 2.1.3  (2022-01-11)
