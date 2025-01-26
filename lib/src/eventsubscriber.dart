@@ -8,8 +8,7 @@ import 'package:flutter/material.dart';
 
 /// A function definition that returns a Widget, given a context,
 /// [EventStatus], and [EventArgs] or [EventArgs] derived object.
-typedef EventFunc<T extends EventArgs> = Widget Function(
-    BuildContext context, EventStatus status, T args);
+typedef EventFunc<T extends EventArgs> = Widget Function(BuildContext context, EventStatus status, T? args);
 
 ///////////////
 
@@ -65,7 +64,7 @@ class EventSubscriber<T extends EventArgs> extends StatefulWidget {
 
 class EventSubscriberState<T extends EventArgs> extends State<EventSubscriber<T>> {
   /// [Event] arguments provided when an [Event] is broadcast.
-  T _eventArgs = EventArgs() as T;
+  T? _eventArgs;
   final _status = EventStatus();
 
   /// The handler that will be subscribed to this Widget's
@@ -76,8 +75,7 @@ class EventSubscriberState<T extends EventArgs> extends State<EventSubscriber<T>
       this._eventArgs = args;
       _status.numEventsReceived++;
 
-      log('Event received so widget rebuilt (#${_status.numEventsReceived}) "${_eventArgs.eventName ?? "Unnamed"}"',
-          source: "EventSubscriber", level: Severity.debug);
+      log('Event received so widget rebuilt (#${_status.numEventsReceived}) "${_eventArgs?.eventName ?? "Unnamed"}"', source: "EventSubscriber", level: Severity.debug);
     });
   }
 
